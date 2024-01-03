@@ -10,6 +10,7 @@ return {
 				"cpp",
 				"css",
 				"fish",
+				"bash",
 				"gitignore",
 				"go",
 				"graphql",
