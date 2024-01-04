@@ -1,5 +1,11 @@
 return {
   {
+    "ggandor/leap.nvim",
+    config = function()
+      require("leap").add_default_mappings(true)
+    end,
+  },
+  {
     "christoomey/vim-tmux-navigator",
     lazy = false,
     keys = {
