@@ -8,7 +8,7 @@ return {
         "astro",
         "cmake",
         "cpp",
-        --"css",
+        "css",
         "html",
         "fish",
         "bash",
