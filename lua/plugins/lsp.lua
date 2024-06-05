@@ -1,3 +1,15 @@
+local function trim(str)
+  -- @type string
+  str = str:gsub("^%s*(.-)%s*$", "%1")
+
+  if string.sub(str, -1, -1) == "." then
+    str = string.sub(str, 1, -2)
+    str = str:gsub("^%s*(.-%s*$)", "%1")
+  end
+
+  return str
+end
+
 return {
   {
     "williamboman/mason.nvim",
@@ -17,59 +29,54 @@ return {
   {
     "neovim/nvim-lspconfig",
     opts = {
+      --diagnostics = {
+      --  underline = true,
+      --  virtual_text = false,
+      --  float = {
+      --    format = function(diagnostic)
+      --      return trim(diagnostic.message)
+      --    end,
+      --    prefix = function(diagnostic, i, total)
+      --      local h1 = "Comment"
+      --      local prefix = total > 1 and ("%d. "):format(i) or ""
+
+      --      if diagnostic.source then
+      --        prefix = ("%s%s: "):format(prefix, trim(diagnostic.source))
+      --      end
+
+      --      return prefix, h1
+      --    end,
+      --  },
+      --},
       inlay_hints = { enabled = true },
       servers = {
         cssls = {},
-        tailwindcss = {
-          root_dir = function(...)
-            return require("lspconfig.util").root_pattern("package.json")(...)
-          end,
-        },
-        volar = {
-          init_options = {
-            -- typescript = {
-            --   tsdk = "/usr/local/lib/"
-            -- }
-          },
-          filetypes = {
-            "typescript",
-            "vue",
-          },
-          root_dir = function(...)
-            return require("lspconfig.util").root_pattern("src/App.vue")(...)
-          end,
-        },
-        tsserver = {
-          root_dir = function(...)
-            return require("lspconfig.util").root_pattern("package.json")(...)
-          end,
-          single_file_support = false,
+        emmet_language_server = {},
+        eslint = {
+          root_dir = require("lspconfig.util").root_pattern(
+            ".eslintrc",
+            ".eslintrc.js",
+            ".eslintrc.cjs",
+            ".eslintrc.yaml",
+            ".eslintrc.yml",
+            ".eslintrc.json"
+          ),
           settings = {
-            typescript = {
-              inlayHints = {
-                includeInlayParameterNameHints = "literal",
-                includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-                includeInlayFunctionParameterTypeHints = true,
-                includeInlayVariableTypeHints = false,
-                includeInlayPropertyDeclarationTypeHints = true,
-                includeInlayFunctionLikeReturnTypeHints = true,
-                includeInlayEnumMemberValueHints = true,
-              },
+            format = {
+              enable = false,
             },
-            javascript = {
-              inlayHints = {
-                includeInlayParameterNameHints = "all",
-                includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-                includeInlayFunctionParameterTypeHints = true,
-                includeInlayVariableTypeHints = true,
-                includeInlayPropertyDeclarationTypeHints = true,
-                includeInlayFunctionLikeReturnTypeHints = true,
-                includeInlayEnumMemberValueHints = true,
-              },
-            },
+            workingDirectory = { mode = "auto" },
           },
         },
         html = {},
+        tailwindcss = {
+          root_dir = require("lspconfig.util").root_pattern("tailwind.config.js", "taiwind.config.ts"),
+        },
+        tsserver = {},
+        volar = {
+          filetypes = { "vue", "typescript" },
+          root_dir = require("lspconfig.util").root_pattern("vite.config.js", "vite.config.ts"),
+        },
         yamlls = {
           settings = {
             yaml = {
@@ -142,7 +149,6 @@ return {
             },
           },
         },
-        emmet_language_server = {},
       },
       setup = {},
     },

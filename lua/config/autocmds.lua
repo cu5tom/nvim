@@ -17,35 +17,31 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- Prevent TSServer and Volar competing
-local lsp_conflicts, _ = pcall(vim.api.nvim_get_autocmds, { group = "LspAttach_conficts" })
-if not lsp_conflicts then
-  vim.api.nvim_create_augroup("LspAttach_conficts", {})
-end
-
+-- Show diagnostics on CursorHold
 vim.api.nvim_create_autocmd("LspAttach", {
-  group = "LspAttach_conficts",
-  desc = "Prevent TSServer and Volar competing",
+  group = vim.api.nvim_create_augroup("LspAttach_auto_diag", {}),
   callback = function(args)
-    if not args.data and args.data.client_id then
+    if not args.buf then
       return
     end
 
-    local active_clients = vim.lsp.get_active_clients()
-    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    --- @type number
+    local buffer = args.buf
 
-    if client and client.name == "volar" then
-      for _, client_ in pairs(active_clients) do
-        if client_.name == "tsserver" then
-          client_.stop()
-        end
-      end
-    elseif client and client.name == "tsserver" then
-      for _, client_ in pairs(active_clients) do
-        if client_.name == "volar" then
-          client_.stop()
-        end
-      end
-    end
+    vim.api.nvim_create_autocmd("CursorHold", {
+      group = vim.api.nvim_create_augroup("_auto_diag", {}),
+      buffer = buffer,
+      callback = function()
+        local opts = {
+          focusable = false,
+          close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+          border = "rounded",
+          source = "always",
+          prefix = " ",
+          scope = "cursor",
+        }
+        vim.diagnostic.open_float(nil, opts)
+      end,
+    })
   end,
 })

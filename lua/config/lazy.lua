@@ -19,7 +19,7 @@ require("lazy").setup({
     -- import any extras modules here
     { import = "lazyvim.plugins.extras.lang.typescript" },
     { import = "lazyvim.plugins.extras.lang.json" },
-    { import = "lazyvim.plugins.extras.lsp.none-ls" },
+    -- { import = "lazyvim.plugins.extras.lsp.none-ls" },
     { import = "lazyvim.plugins.extras.util.mini-hipatterns" },
     { import = "lazyvim.plugins.extras.linting.eslint" },
     { import = "lazyvim.plugins.extras.formatting.prettier" },
@@ -57,3 +57,11 @@ require("lazy").setup({
     },
   },
 })
+
+-- require("mason-lspconfig").setup_handlers({
+--  function(server_name)
+--    if require("neoconf").get(server_name .. ".disable") then
+--      return
+--    end
+--  end,
+--})

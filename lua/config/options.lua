@@ -8,6 +8,7 @@ vim.scriptencoding = "utf-8"
 vim.opt.encoding = "utf-8"
 vim.opt.fileencoding = "utf-8"
 
+vim.g.autoformat = true
 -- vim.opt.clipboard = ""
 
 --vim.opt.number = true
